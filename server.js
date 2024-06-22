@@ -179,5 +179,5 @@ app.post('/api/submit-contact', (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-    console.log(`Server is running on http://http://summer.mysql.database.azure.com/:${port}`);
+    console.log(`Server is running on http://localhost:${port}`);
 });
