@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const app = express();
-const port = 3306;
+const port = 8000;
 const secretKey = 'helloiamankit'; // Replace with your secret key
 
 // Create a MySQL connection pool
@@ -179,5 +179,5 @@ app.post('/api/submit-contact', (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-    console.log(`Server is running on http://https://red-shop.azurewebsites.net/:${port}`);
+    console.log(`Server is running on http://localhost:${port}`);
 });

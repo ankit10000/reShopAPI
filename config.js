@@ -1,12 +1,7 @@
 module.exports = {
-    // host: 'http://summer.mysql.database.azure.com/',
-    // port: 3307,
-    // database: 'summer',
-    // user: 'root',
-    // password: '' 
-    host: "summer.mysql.database.azure.com", 
-    user: "summer", 
-    password: "Ankit&1234", 
-    database: "summer", 
+    host: "localhost", 
+    user: "id22358308_redshopcloth", 
+    password: "Ankit@1234", 
+    database: "id22358308_summerproject", 
     port: 3306,
 };
