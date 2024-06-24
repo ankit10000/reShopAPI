@@ -14,6 +14,10 @@ const pool = mysql.createPool(config);
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use('/', (req, res)=> {
+    res.send('Hello World');
+});
 // Endpoint to get all users
 app.get('/api/user', (req, res) => {
     pool.query('SELECT * FROM user', (error, results) => {
