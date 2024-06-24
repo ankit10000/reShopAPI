@@ -35,7 +35,7 @@ app.post('/api/user/signup', async (req, res) => {
 
     try {
         
-        const sql = 'INSERT INTO user (name, email, contact, password, address, active) VALUES (?, ?, ?, ?, ?, ?)';
+        const sql = 'INSERT INTO users (name, email, contact, password, address, active) VALUES (?, ?, ?, ?, ?, ?)';
         pool.query(sql, [name, email, contact, password, address, active], (error, results) => {
             if (error) {
                 return res.status(500).json({ error: error.message });
@@ -54,7 +54,7 @@ app.post('/api/user/login', (req, res) => {
         return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    const sql = 'SELECT * FROM user WHERE email = ?';
+    const sql = 'SELECT * FROM users WHERE email = ?';
     pool.query(sql, [email], async (error, results) => {
         if (error) {
             return res.status(500).json({ error: error.message });
@@ -100,7 +100,7 @@ const authenticateToken = (req, res, next) => {
 
 // Endpoint to fetch user details
 app.get('/api/user-details', authenticateToken, (req, res) => {
-    const sql = 'SELECT id, name, email, contact, address, active FROM user WHERE id = ?';
+    const sql = 'SELECT id, name, email, contact, address, active FROM users WHERE id = ?';
     pool.query(sql, [req.user.id], (error, results) => {
         if (error) {
             return res.status(500).json({ error: error.message });
