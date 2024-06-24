@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const cors = require('cors');
 const app = express();
-const port = 8000;
+const port = process.env.PORT || 3000;
 const secretKey = process.env.SECRET_KEY; // Replace with your secret key
 
 // Create a MySQL connection pool
