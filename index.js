@@ -3,10 +3,11 @@ const mysql = require('mysql2');
 const config = require('./config');
 const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs');
+require('dotenv').config();
 const cors = require('cors');
 const app = express();
 const port = 8000;
-const secretKey = 'helloiamankit'; // Replace with your secret key
+const secretKey = process.env.SECRET_KEY; // Replace with your secret key
 
 // Create a MySQL connection pool
 const pool = mysql.createPool(config);
@@ -15,10 +16,7 @@ const pool = mysql.createPool(config);
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-app.use('/', (req, res)=> {
-    res.send('Hello World');
-});
-// Endpoint to get all users
+
 app.get('/api/user', (req, res) => {
     pool.query('SELECT * FROM user', (error, results) => {
         if (error) {
