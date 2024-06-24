@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/api/user', (req, res) => {
-    pool.query('SELECT * FROM user', (error, results) => {
+    pool.query('SELECT * FROM users', (error, results) => {
         if (error) {
             return res.status(500).json({ error: error.message });
         }
