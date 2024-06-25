@@ -179,6 +179,55 @@ app.post('/api/submit-contact', (req, res) => {
     });
 });
 
+
+// Endpoint to delete a product
+app.delete('/api/product/delete/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM products WHERE id = ?';
+    pool.query(sql, [id], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        res.json({ message: 'Product deleted successfully' });
+    });
+});
+
+// Endpoint to update a product
+app.put('/api/product/update/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, price, rating, image } = req.body;
+    const sql = 'UPDATE products SET name = ?, price = ?, rating = ?, image = ? WHERE id = ?';
+    pool.query(sql, [name, price, rating, image, id], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        res.json({ message: 'Product updated successfully' });
+    });
+});
+
+// Endpoint to update a user
+app.put('/api/user/update/:id', authenticateToken, (req, res) => {
+    const { id } = req.params;
+    const { name, email, contact, address, active } = req.body;
+    const sql = 'UPDATE users SET name = ?, email = ?, contact = ?, address = ?, active = ? WHERE id = ?';
+    pool.query(sql, [name, email, contact, address, active, id], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.json({ message: 'User updated successfully' });
+    });
+});
+
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
