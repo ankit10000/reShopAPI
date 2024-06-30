@@ -144,18 +144,11 @@ app.get('/api/orders', authenticateToken, (req, res) => {
 });
 
 app.get('/api/ordersAdmin', (req, res) => {
-    const sql = 'SELECT * FROM orders WHERE user_id = ?';
-    pool.query(sql, (error, results) => {
+    pool.query('SELECT * FROM orders', (error, results) => {
         if (error) {
             return res.status(500).json({ error: error.message });
         }
-        res.json(results.map(order => ({
-            id: order.order_id,
-            items: JSON.parse(order.items),
-            address: order.address,
-            paymentMethod: order.payment_method,
-            createdAt: order.created_at
-        })));
+        res.json(results);
     });
 });
 app.post('/api/product/addproduct', (req, res) => {
