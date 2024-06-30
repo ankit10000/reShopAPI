@@ -145,7 +145,7 @@ app.get('/api/orders', authenticateToken, (req, res) => {
 
 app.get('/api/ordersAdmin', (req, res) => {
     const sql = 'SELECT * FROM orders WHERE order_id = ?';
-    pool.query(sql, [req.user.id], (error, results) => {
+    pool.query(sql, (error, results) => {
         if (error) {
             return res.status(500).json({ error: error.message });
         }
