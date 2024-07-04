@@ -28,19 +28,19 @@ app.get('/api/user', (req, res) => {
 
 // Endpoint to add a new user
 app.post('/api/user/signup', async (req, res) => {
-    const { name, email, contact, password, address, active } = req.body;
-    if (!name || !email || !contact || !password || !address || !active) {
+    const { name, email, contact, password, address, active, admin } = req.body;
+    if (!name || !email || !contact || !password || !address || !active || !admin) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
     try {
         
-        const sql = 'INSERT INTO users (name, email, contact, password, address, active) VALUES (?, ?, ?, ?, ?, ?)';
-        pool.query(sql, [name, email, contact, password, address, active], (error, results) => {
+        const sql = 'INSERT INTO users (name, email, contact, password, address, active, admin) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        pool.query(sql, [name, email, contact, password, address, active, admin], (error, results) => {
             if (error) {
                 return res.status(500).json({ error: error.message });
             }
-            res.status(201).json({ id: results.insertId, name, email, contact, address, active });
+            res.status(201).json({ id: results.insertId, name, email, contact, address, active, admin });
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -70,10 +70,22 @@ app.post('/api/user/login', (req, res) => {
             return res.status(500).json({ error: 'Password field is missing for the user' });
         }
 
+        if (!user.active) {
+            return res.status(501).json({ error: 'User is not active' });
+        }
+
         try {
-            const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
-            console.log('Generated token:', token); // Log the generated token
-            res.json({ token });
+            
+            if(user.active && !user.admin){
+
+                const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
+                console.log('Generated token:', token); // Log the generated token
+                res.json({ token });
+            }else if(user.admin && user.active){
+                const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
+                console.log('Generated token:', token); // Log the generated token
+                res.status(600).json({ token });
+            }
         } catch (compareError) {
             return res.status(500).json({ error: compareError.message });
         }
