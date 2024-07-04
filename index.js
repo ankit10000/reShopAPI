@@ -84,7 +84,7 @@ app.post('/api/user/login', (req, res) => {
             }else if(user.admin && user.active){
                 const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
                 console.log('Generated token:', token); // Log the generated token
-                res.status(600).json({ token });
+                res.status(201).json({ token });
             }
         } catch (compareError) {
             return res.status(500).json({ error: compareError.message });
