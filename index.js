@@ -198,6 +198,14 @@ app.post('/api/submit-contact', (req, res) => {
     });
 });
 
+app.get('/api/get-submit-contact', (req, res) => {
+    let sql = 'SELECT * FROM contacts';
+    pool.query(sql, (err, results) => {
+        if (err) throw err;
+        res.json(results);
+    });
+});
+
 
 // Endpoint to delete a product
 app.delete('/api/product/delete/:id', (req, res) => {
