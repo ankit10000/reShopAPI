@@ -132,16 +132,16 @@ app.get('/api/user-details', authenticateToken, (req, res) => {
     });
 });
 app.post('/api/order', authenticateToken, (req, res) => {
-    const { items, address, paymentMethod } = req.body;
+    const { items, address, paymentMethod, total } = req.body;
 
     if (!items || !address || !paymentMethod) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const sql = 'INSERT INTO orders (user_id, items, address, payment_method) VALUES (?, ?, ?, ?)';
+    const sql = 'INSERT INTO orders (user_id, items, address, payment_method, total) VALUES (?, ?, ?, ?, ?)';   
     const itemsStr = JSON.stringify(items); // Store items as a JSON string
 
-    pool.query(sql, [req.user.id, itemsStr, address, paymentMethod], (error, results) => {
+    pool.query(sql, [req.user.id, itemsStr, address, paymentMethod, total], (error, results) => {
         if (error) {
             return res.status(500).json({ error: error.message });
         }
