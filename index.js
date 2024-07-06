@@ -75,23 +75,34 @@ app.post('/api/user/login', (req, res) => {
         }
 
         try {
-            
-            if(user.active && !user.admin){
-
-                const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
-                console.log('Generated token:', token); // Log the generated token
-                res.json({ token });
-            }else if(user.admin && user.active){
-                const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
-                console.log('Generated token:', token); // Log the generated token
-                res.status(201).json({ token });
+            if (user.active && !user.admin) {
+                const updatedVisites = user.visites + 1;
+                const updateSql = 'UPDATE users SET visites = ? WHERE email = ?';
+                pool.query(updateSql, [updatedVisites, email], (error, results) => {
+                    if (error) {
+                        return res.status(500).json({ error: error.message });
+                    }
+                    const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
+                    console.log('Generated token:', token); // Log the generated token
+                    res.status(200).json({ token, visites: updatedVisites });
+                });
+            } else if (user.admin && user.active) {
+                const updatedVisites = user.visites + 1;
+                const updateSql = 'UPDATE users SET visites = ? WHERE email = ?';
+                pool.query(updateSql, [updatedVisites, email], (error, results) => {
+                    if (error) {
+                        return res.status(500).json({ error: error.message });
+                    }
+                    const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
+                    console.log('Generated token:', token); // Log the generated token
+                    res.status(201).json({ token, visites: updatedVisites });
+                });
             }
         } catch (compareError) {
             return res.status(500).json({ error: compareError.message });
         }
     });
 });
-
 
 
 // Middleware to verify token
